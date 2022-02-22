@@ -8,19 +8,19 @@ package "model" {
     }
 
     interface IConfig as "Config" {
-       + {abstract} Load()
-       + {abstract} Save()
+        + {abstract} Load()
+        + {abstract} Save()
     }
 
     interface IGGraph as "GGraph" {
-       + {abstract} SetSimpleAdjMatrix(AdjMatrix)
-       + {abstract} SetDirectedAdjMatrix(AdjMatrix)
-       + {abstract} Show()
+        + {abstract} SetSimpleAdjMatrix(AdjMatrix)
+        + {abstract} SetDirectedAdjMatrix(AdjMatrix)
+        + {abstract} Show()
     }
 
     interface IManager as "Manager" {
-       + {abstract} Init()
-       + {abstract} Start()
+        + {abstract} Init()
+        + {abstract} Start()
     }
 }
 note top: интерфейс для\n управления программой
@@ -63,8 +63,8 @@ package "internal" {
 
     package "manager" {
         class manager{
-            + {abstract} Init()
-            + {abstract} Start()
+            + Init()
+            + Start()
         }
     }
     IManager <|-- manager
