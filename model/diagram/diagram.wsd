@@ -13,8 +13,8 @@ package "model" {
     }
 
     interface IGGraph as "GGraph" {
-       + {abstract} SetSimpleAdjMatriz(AdjMatrix)
-       + {abstract} SetDirectedAdjMatriz(AdjMatrix)
+       + {abstract} SetSimpleAdjMatrix(AdjMatrix)
+       + {abstract} SetDirectedAdjMatrix(AdjMatrix)
        + {abstract} Show()
     }
 
@@ -63,7 +63,8 @@ package "internal" {
 
     package "manager" {
         class manager{
-
+            + {abstract} Init()
+            + {abstract} Start()
         }
     }
     IManager <|-- manager
