@@ -9,7 +9,7 @@ type manager struct {
 
 var amanager *manager
 
-func NewConfig() model.Manager {
+func NewManager() model.Manager {
 	if amanager == nil {
 		amanager = new(manager)
 	}

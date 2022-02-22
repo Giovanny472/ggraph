@@ -9,7 +9,7 @@ type ggraph struct {
 
 var aggraph *ggraph
 
-func NewConfig() model.GGraph {
+func NewGGraph() model.GGraph {
 	if aggraph == nil {
 		aggraph = new(ggraph)
 	}
