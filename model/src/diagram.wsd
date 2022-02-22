@@ -1,0 +1,81 @@
+@startuml
+skinparam ClassAttributeIconSize 0
+
+package "model" {
+    interface IApp as "Application" {
+        + {abstract} Config()
+        + {abstract} Start()
+    }
+
+    interface IConfig as "Config" {
+       + {abstract} Load()
+       + {abstract} Save()
+    }
+
+    interface IGGraph as "GGraph" {
+       + {abstract} SetSimpleAdjMatriz(AdjMatrix)
+       + {abstract} SetDirectedAdjMatriz(AdjMatrix)
+       + {abstract} Show()
+    }
+
+    interface IManager as "Manager" {
+       + {abstract} Init()
+       + {abstract} Start()
+    }
+}
+note top: интерфейс для\n управления программой
+
+
+package "app" {
+
+    class AppGraph{
+        - Config  сonfig
+        - Manager manager
+        - GGraph graph
+    }
+    IApp <|--AppGraph
+    IConfig  <--*  AppGraph
+    IManager <--*  AppGraph
+    IGGraph  <--*  AppGraph
+
+    ggraph  <.. AppGraph
+    config  <.. AppGraph
+    manager <.. AppGraph
+}
+
+package "internal" {
+
+    package "config" {
+        class config{
+            + Load()
+            + Save()
+        }
+    }
+    IConfig <|-- config
+
+    package "ggraph" {
+        class ggraph{
+            + SetAdjMatriz()
+            + Show()
+        }
+    }
+    IGGraph  <|-- ggraph
+
+    package "manager" {
+        class manager{
+
+        }
+    }
+    IManager <|-- manager
+
+}
+
+
+package ui {
+    package factoryui{}
+    package terminal{}
+    package desktop{}
+}
+
+
+@enduml
