@@ -2,14 +2,10 @@
 skinparam ClassAttributeIconSize 0
 
 package "model" {
-    interface IApp as "Application" {
-        + {abstract} Config()
-        + {abstract} Start()
-    }
 
-    interface IConfig as "Config" {
-        + {abstract} Load()
-        + {abstract} Save()
+    
+    interface IUI as "UI" {
+        + {abstract} MakeMainWindow()
     }
 
     interface IGGraph as "GGraph" {
@@ -18,35 +14,32 @@ package "model" {
         + {abstract} Show()
     }
 
+    interface IConfig as "Config" {
+        + {abstract} Load()
+        + {abstract} Save()
+    }
+
     interface IManager as "Manager" {
         + {abstract} Init()
         + {abstract} Start()
     }
-}
-note top: интерфейс для\n управления программой
 
-
-package "app" {
-
-    class AppGraph{
-        - Config  сonfig
-        - Manager manager
-        - GGraph graph
-    }
-    IApp <|--AppGraph
-    IConfig  <--*  AppGraph
-    IManager <--*  AppGraph
-    IGGraph  <--*  AppGraph
-
-    ggraph  <.. AppGraph
-    config  <.. AppGraph
-    manager <.. AppGraph
 }
 
+note "интерфейс для\n управления программой" as N1
+N1 .. IManager  
+    
 package "internal" {
 
+    package "ui" {
+        class uigraph {
+            + MakeMainWindow() ui.UI
+        }
+    }
+    IUI <|-- uigraph
+
     package "config" {
-        class config{
+        class config {
             + Load()
             + Save()
         }
@@ -63,19 +56,48 @@ package "internal" {
 
     package "manager" {
         class manager{
-            + Init()
+            + Init(UI)
             + Start()
         }
     }
     IManager <|-- manager
-
+    ggraph  <..* manager
+    
 }
 
+package "app" {
 
-package ui {
-    package factoryui{}
-    package terminal{}
-    package desktop{}
+    interface IApp as "Application" {
+        + {abstract} Config()
+        + {abstract} Start()
+    }
+
+    class AppGraph{
+        config model.Config
+	    manag  model.Manager
+	    gui    model.UI
+    }
+    IApp <|--AppGraph
+
+    manager <..* AppGraph
+    uigraph <..* AppGraph
+    config  <..* AppGraph
+    
+}
+
+package gui as "ui" {
+
+    interface IGui as "UI" {
+        + {abstract} Show()
+    }
+
+    class formain {
+        - init()
+        + Show()
+    }
+    IGui  <|-- formain 
+    IGui  <..o uigraph  
+    uigraph  ..formain 
 }
 
 

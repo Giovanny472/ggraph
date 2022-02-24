@@ -1,4 +1,4 @@
-package model
+package app
 
 type Application interface {
 	Config()

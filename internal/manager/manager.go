@@ -5,13 +5,14 @@ import (
 )
 
 type manager struct {
+	graph model.GGraph
 }
 
 var amanager *manager
 
-func NewManager() model.Manager {
+func NewManager(grph model.GGraph) model.Manager {
 	if amanager == nil {
-		amanager = new(manager)
+		amanager = &manager{grph}
 	}
 	return amanager
 }
