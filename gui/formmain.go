@@ -2,6 +2,8 @@ package gui
 
 import (
 	"fmt"
+
+	"github.com/Giovanny472/ggraph/model"
 )
 
 type formMain struct {
@@ -9,7 +11,7 @@ type formMain struct {
 
 var fmmain *formMain
 
-func NewFormMain() GUI {
+func NewFormMain() UIFormMain {
 
 	if fmmain == nil {
 		fmmain = new(formMain)
@@ -17,9 +19,13 @@ func NewFormMain() GUI {
 	return fmmain
 }
 
-//func (fm *formMain) Init(manag model.Manager) {
+func (fm *formMain) Init(manag model.Manager) {
 
-//}
+}
+
+func (fm *formMain) SetSimpleAdjMatrix(adm AdjMatrix) {
+
+}
 
 func (fm *formMain) Show() {
 

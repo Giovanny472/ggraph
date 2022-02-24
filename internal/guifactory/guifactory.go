@@ -1,8 +1,7 @@
-package uigraph
+package guifactory
 
 import (
 	"github.com/Giovanny472/ggraph/gui"
-	"github.com/Giovanny472/ggraph/model"
 )
 
 type uigraph struct {
@@ -10,7 +9,7 @@ type uigraph struct {
 
 var uigrp *uigraph
 
-func NewUIFactory() model.UIFactory {
+func NewUIFactory() gui.GUIFactory {
 
 	if uigrp == nil {
 		uigrp = new(uigraph)
@@ -23,6 +22,6 @@ func (uigr *uigraph) init() {
 
 }
 
-func (uigr *uigraph) MakeMainWindow() gui.GUI {
+func (uigr *uigraph) MakeMainWindow() gui.UIFormMain {
 	return gui.NewFormMain()
 }

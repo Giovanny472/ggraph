@@ -1,18 +1,19 @@
 package app
 
 import (
+	"github.com/Giovanny472/ggraph/gui"
 	"github.com/Giovanny472/ggraph/model"
 
 	"github.com/Giovanny472/ggraph/internal/config"
 	"github.com/Giovanny472/ggraph/internal/ggraph"
+	"github.com/Giovanny472/ggraph/internal/guifactory"
 	"github.com/Giovanny472/ggraph/internal/manager"
-	"github.com/Giovanny472/ggraph/internal/uigraph"
 )
 
 type appGraph struct {
-	config     model.Config
-	manag      model.Manager
-	guifactory model.UIFactory
+	config  model.Config
+	manag   model.Manager
+	guifact gui.GUIFactory
 }
 
 var apg *appGraph
@@ -35,7 +36,7 @@ func (app *appGraph) init() {
 	app.manag = manager.NewManager(ggraph.NewGGraph())
 
 	// слой UI
-	app.guifactory = uigraph.NewUIFactory()
+	app.guifact = guifactory.NewUIFactory()
 
 }
 
@@ -46,10 +47,10 @@ func (app *appGraph) Config() {
 func (app *appGraph) Start() {
 
 	// главное окно
-	fmMain := app.guifactory.MakeMainWindow()
+	fmMain := app.guifact.MakeMainWindow()
 
 	// инициализация параметров
-	//fmMain.Init(app.manag)
+	fmMain.Init(app.manag)
 
 	// отображение
 	fmMain.Show()
