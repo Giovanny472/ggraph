@@ -6,7 +6,7 @@ package "model" {
     interface IGGraph as "GGraph" {
         + {abstract} SetSimpleAdjMatrix(AdjMatrix)
         + {abstract} SetDirectedAdjMatrix(AdjMatrix)
-        + {abstract} Show()
+        + {abstract} Save()
     }
 
     interface IConfig as "Config" {
@@ -16,7 +16,7 @@ package "model" {
 
     interface IManager as "Manager" {
         + {abstract} Init()
-        + {abstract} Start()
+        + {abstract} Graph() GGraph
     }
 
     interface IUIBase as "UIBase" {
@@ -30,7 +30,6 @@ package "model" {
     interface IUIFormMain as "UIFormMain" {
         +{abstract} model.UIBase
         +{abstract} Init(manag model.Manager)
-        +{abstract} SetSimpleAdjMatrix(adm AdjMatrix)
     }
     IUIBase <|-- IUIFormMain 
 
@@ -51,8 +50,9 @@ package "internal" {
 
     package "ggraph" {
         class ggraph{
-            + SetAdjMatriz()
-            + Show()
+            + SetSimpleAdjMatrix(AdjMatrix)
+            + SetDirectedAdjMatrix(AdjMatrix)
+            + Save()
         }
     }
     IGGraph  <|-- ggraph
@@ -60,7 +60,7 @@ package "internal" {
     package "manager" {
         class manager{
             + Init()
-            + Start()
+            + Graph() GGraph
         }
     }
     IManager <|-- manager
