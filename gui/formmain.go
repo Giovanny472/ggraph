@@ -12,9 +12,6 @@ import (
 
 type formMain struct {
 
-	// матрица
-	adjmatrix *model.AdjMatrix
-
 	// manager
 	mng model.Manager
 }
@@ -31,10 +28,6 @@ func NewFormMain() model.UIFormMain {
 
 func (fm *formMain) Init(manag model.Manager) {
 	fm.mng = manag
-}
-
-func (fm *formMain) SetSimpleAdjMatrix(adm *model.AdjMatrix) {
-	fm.adjmatrix = adm
 }
 
 func (fm *formMain) Show() {
@@ -75,7 +68,7 @@ func (fm *formMain) buildform(fmMain fyne.Window) {
 
 	//lytColBottom
 	btnExit := widget.NewButton("выход", fm.onClose)
-	btnGraph := widget.NewButton("граф", nil)
+	btnGraph := widget.NewButton("граф", fm.onGraph)
 	lytbtn := container.NewGridWithColumns(2, btnExit, btnGraph)
 
 	// layout
@@ -90,5 +83,5 @@ func (fm *formMain) onClose() {
 
 func (fm *formMain) onGraph() {
 
-	//fm.mng.
+	//fm.mng.Start()
 }

@@ -2,5 +2,5 @@ package model
 
 type Manager interface {
 	Init()
-	Start()
+	Graph() GGraph
 }

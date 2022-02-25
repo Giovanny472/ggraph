@@ -1,7 +1,9 @@
 package model
 
+type AdjMatrix [][]int
+
 type GGraph interface {
-	SetSimpleAdjMatrix()
-	SetDirectedAdjMatrix()
-	Show()
+	SetSimpleAdjMatrix(adm *AdjMatrix)
+	SetDirectedAdjMatrix(adm *AdjMatrix)
+	Save()
 }

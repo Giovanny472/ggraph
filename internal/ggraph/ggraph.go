@@ -16,13 +16,13 @@ func NewGGraph() model.GGraph {
 	return aggraph
 }
 
-func (gr *ggraph) SetSimpleAdjMatrix() {
+func (gr *ggraph) SetSimpleAdjMatrix(adm *model.AdjMatrix) {
 
 }
 
-func (gr *ggraph) SetDirectedAdjMatrix() {
+func (gr *ggraph) SetDirectedAdjMatrix(adm *model.AdjMatrix) {
 
 }
 
-func (gr *ggraph) Show() {
+func (gr *ggraph) Save() {
 }

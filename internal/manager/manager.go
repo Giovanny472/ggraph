@@ -21,5 +21,7 @@ func (man *manager) Init() {
 
 }
 
-func (man *manager) Start() {
+func (man *manager) Graph() model.GGraph {
+	//	man.graph.SetSimpleAdjMatrix()
+	return nil
 }
