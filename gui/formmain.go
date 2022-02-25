@@ -1,6 +1,9 @@
 package gui
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/Giovanny472/ggraph/model"
 
 	"fyne.io/fyne/v2"
@@ -14,6 +17,9 @@ type formMain struct {
 
 	// manager
 	mng model.Manager
+
+	// widgets
+	txtMatrix *widget.Entry
 }
 
 var fmmain *formMain
@@ -58,13 +64,14 @@ func (fm *formMain) buildform(fmMain fyne.Window) {
 
 	// lytTop
 	//lytTop := container.NewGridWithColumns(1, widget.NewMultiLineEntry())
-	txtMatrix := widget.NewMultiLineEntry()
+	fm.txtMatrix = widget.NewMultiLineEntry()
+	//fm.txtMatrix.FocusGained()
 	//!!интересно --> lytTop := container.NewVBox(txtMatrix)
 
 	// lytCenter
 	txtGraph := widget.NewMultiLineEntry()
 
-	lytCenter := container.NewGridWithRows(2, txtMatrix, txtGraph)
+	lytCenter := container.NewGridWithRows(2, fm.txtMatrix, txtGraph)
 
 	//lytColBottom
 	btnExit := widget.NewButton("выход", fm.onClose)
@@ -83,5 +90,26 @@ func (fm *formMain) onClose() {
 
 func (fm *formMain) onGraph() {
 
-	//fm.mng.Start()
+	//val := fm.txtMatrix.Text
+	//enter := []byte("10")
+	val := strings.Split(fm.txtMatrix.Text, " ")
+
+	fmt.Println(val)
+
+	for _, element := range val {
+
+		abyte := []byte(element)
+		if abyte == "10" {
+			fmt.Println("enter")
+			continue
+		}
+
+		fmt.Print(abyte, "--")
+		//fmt.Print(len(abyte), "<>")
+	}
+	fmt.Println(" ")
+	//var am model.AdjMatrix
+	//am = append(am, )
+	//fm.mng.Graph().SetSimpleAdjMatrix()
+	//fm.mng.Graph().
 }
