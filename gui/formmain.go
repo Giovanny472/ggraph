@@ -11,7 +11,7 @@ type formMain struct {
 
 var fmmain *formMain
 
-func NewFormMain() UIFormMain {
+func NewFormMain() model.UIFormMain {
 
 	if fmmain == nil {
 		fmmain = new(formMain)
@@ -23,7 +23,7 @@ func (fm *formMain) Init(manag model.Manager) {
 
 }
 
-func (fm *formMain) SetSimpleAdjMatrix(adm AdjMatrix) {
+func (fm *formMain) SetSimpleAdjMatrix(adm model.AdjMatrix) {
 
 }
 

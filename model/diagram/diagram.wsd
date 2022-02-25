@@ -3,11 +3,6 @@ skinparam ClassAttributeIconSize 0
 
 package "model" {
 
-    
-    interface IUI as "UI" {
-        + {abstract} MakeMainWindow()
-    }
-
     interface IGGraph as "GGraph" {
         + {abstract} SetSimpleAdjMatrix(AdjMatrix)
         + {abstract} SetDirectedAdjMatrix(AdjMatrix)
@@ -24,19 +19,27 @@ package "model" {
         + {abstract} Start()
     }
 
+    interface IUIBase as "UIBase" {
+        + {abstract} Show()
+    }
+
+    interface IGUIFactory as "GUIFactory"{
+        +{abstract}MakeMainWindow() UIFormMain
+    }
+
+    interface IUIFormMain as "UIFormMain" {
+        +{abstract} model.UIBase
+        +{abstract} Init(manag model.Manager)
+        +{abstract} SetSimpleAdjMatrix(adm AdjMatrix)
+    }
+    IUIBase <|-- IUIFormMain 
+
 }
 
 note "интерфейс для\n управления программой" as N1
 N1 .. IManager  
     
 package "internal" {
-
-    package "ui" {
-        class uigraph {
-            + MakeMainWindow() ui.UI
-        }
-    }
-    IUI <|-- uigraph
 
     package "config" {
         class config {
@@ -56,7 +59,7 @@ package "internal" {
 
     package "manager" {
         class manager{
-            + Init(UI)
+            + Init()
             + Start()
         }
     }
@@ -64,6 +67,23 @@ package "internal" {
     ggraph  <..* manager
     
 }
+
+package gui as "gui" {
+
+    class formain {
+        + Init(manag model.Manager)
+        + SetSimpleAdjMatrix(adm AdjMatrix)
+        + Show()
+    }
+    IUIFormMain <|-- formain 
+    
+    class guifactory {
+        + MakeMainWindow() IUIFormMain
+    }
+    IGUIFactory <|-- guifactory
+    formain <.. guifactory
+}
+
 
 package "app" {
 
@@ -75,30 +95,22 @@ package "app" {
     class AppGraph{
         config model.Config
 	    manag  model.Manager
-	    gui    model.UI
+	    gui    UI
     }
     IApp <|--AppGraph
 
     manager <..* AppGraph
-    uigraph <..* AppGraph
     config  <..* AppGraph
+    guifactory <..*AppGraph
     
 }
 
-package gui as "ui" {
-
-    interface IGui as "UI" {
-        + {abstract} Show()
+package cmd {
+    class main {
+        App.Config()
+        App.Start()
     }
-
-    class formain {
-        - init()
-        + Show()
-    }
-    IGui  <|-- formain 
-    IGui  <..o uigraph  
-    uigraph  ..formain 
+    IApp <--*main
 }
-
 
 @enduml
