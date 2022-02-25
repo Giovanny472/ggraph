@@ -39,7 +39,7 @@ func (app *appGraph) init() {
 }
 
 func (app *appGraph) Config() {
-
+	// пока не реализовано
 }
 
 func (app *appGraph) Start() {

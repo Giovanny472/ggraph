@@ -5,5 +5,5 @@ type AdjMatrix [][]int
 type UIFormMain interface {
 	UIBase
 	Init(manag Manager)
-	SetSimpleAdjMatrix(adm AdjMatrix)
+	SetSimpleAdjMatrix(adm *AdjMatrix)
 }
