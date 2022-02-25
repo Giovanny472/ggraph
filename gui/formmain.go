@@ -1,13 +1,12 @@
 package gui
 
 import (
-	"fmt"
-
 	"github.com/Giovanny472/ggraph/model"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -51,7 +50,6 @@ func (fm *formMain) Show() {
 	formMain.Show()
 
 	appUI.Run()
-	fmt.Println("show form")
 }
 
 func (fm *formMain) buildform(fmMain fyne.Window) {
@@ -59,23 +57,38 @@ func (fm *formMain) buildform(fmMain fyne.Window) {
 	// положение
 	fmMain.CenterOnScreen()
 
+	// темная тема
+	fyne.CurrentApp().Settings().SetTheme(theme.DarkTheme())
+
 	// размер
 	fmMain.Resize(fyne.NewSize(1020, 720))
 
-	// lytCenter
-	lytTop := container.NewGridWithColumns(1, widget.NewMultiLineEntry())
+	// lytTop
+	//lytTop := container.NewGridWithColumns(1, widget.NewMultiLineEntry())
+	txtMatrix := widget.NewMultiLineEntry()
+	//!!интересно --> lytTop := container.NewVBox(txtMatrix)
 
 	// lytCenter
-	lytCenter := container.NewGridWithColumns(1, widget.NewMultiLineEntry())
+	txtGraph := widget.NewMultiLineEntry()
+
+	lytCenter := container.NewGridWithRows(2, txtMatrix, txtGraph)
 
 	//lytColBottom
-	lyBottom := container.NewGridWithColumns(2, widget.NewButton("выход", nil), widget.NewButton("граф", nil))
+	btnExit := widget.NewButton("выход", fm.onClose)
+	btnGraph := widget.NewButton("граф", nil)
+	lytbtn := container.NewGridWithColumns(2, btnExit, btnGraph)
 
 	// layout
-	baselyt := container.NewGridWithRows(3,
-		lytTop,
-		lytCenter,
-		lyBottom)
+	baselyt := container.NewBorder(nil, lytbtn, nil, nil, lytCenter)
 
 	fmMain.SetContent(baselyt)
+}
+
+func (fm *formMain) onClose() {
+	fyne.CurrentApp().Quit()
+}
+
+func (fm *formMain) onGraph() {
+
+	//fm.mng.
 }
