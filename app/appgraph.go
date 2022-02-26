@@ -32,7 +32,8 @@ func (app *appGraph) init() {
 	app.config = config.NewConfig()
 
 	// слой логики
-	app.manag = manager.NewManager(ggraph.NewGGraph(), utilities.NewUtilities())
+	app.manag = manager.NewManager(ggraph.NewGGraph(),
+		utilities.NewUtilities())
 
 	// слой UI
 	app.guifact = gui.NewUIFactory()

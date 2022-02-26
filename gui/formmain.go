@@ -1,6 +1,8 @@
 package gui
 
 import (
+	"log"
+
 	"github.com/Giovanny472/ggraph/model"
 
 	"fyne.io/fyne/v2"
@@ -88,13 +90,16 @@ func (fm *formMain) onClose() {
 func (fm *formMain) onGraph() {
 
 	// получение матрицы
-	adjMatrix := fm.mng.Utilities().StrToAdjMatrix(fm.txtMatrix.Text)
+	adjMatrix, err := fm.mng.Utilities().StrToAdjMatrix(fm.txtMatrix.Text)
+	if err != nil {
+		log.Println("Error Ongraph: " + err.Error())
+	}
 
 	// настройка матрица
 	fm.mng.Graph().SetDirectedAdjMatrix(adjMatrix)
 
 	// cохранение графа
-	fm.mng.Graph().Save()
+	//fm.mng.Graph().Save()
 
 	// отображение графа
 }

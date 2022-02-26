@@ -1,6 +1,9 @@
 package utilities
 
 import (
+	"strconv"
+	"strings"
+
 	"github.com/Giovanny472/ggraph/model"
 )
 
@@ -17,42 +20,42 @@ func NewUtilities() model.Utilities {
 	return util
 }
 
-func (ut *utilities) StrToAdjMatrix(data string) *model.AdjMatrix {
+func (ut *utilities) StrToAdjMatrix(data string) (*model.AdjMatrix, error) {
 
-	/*
-		listMatrix := strings.Split(fm.txtMatrix.Text, "\n")
-		fmt.Println("listMatrix-->", listMatrix)
+	listMatrix := strings.Split(data, "\n")
 
-		var amatrix [][]string
-		var row []string
+	var amatrix model.AdjMatrix
+	var arow []int
 
-		for idx := 0; idx < len(listMatrix); idx++ {
+	for idx := 0; idx < len(listMatrix); idx++ {
 
-			listRow := strings.Split(listMatrix[idx], " ")
+		// строка
+		listRow := strings.Split(listMatrix[idx], " ")
 
-			row = nil
+		// инициализация
+		arow = nil
 
-			for idxrow := 0; idxrow < len(listRow); idxrow++ {
+		for idxrow := 0; idxrow < len(listRow); idxrow++ {
 
-				avalue := listRow[idxrow]
-				avalue = strings.Trim(avalue, " ")
-				if len(avalue) == 0 {
-					continue
-				}
-
-				row = append(row, avalue)
-
+			astrval := listRow[idxrow]
+			astrval = strings.Trim(astrval, " ")
+			if len(astrval) == 0 {
+				continue
 			}
 
-			if len(row) > 0 {
-				amatrix = append(amatrix, row)
+			aintval, err := strconv.Atoi(astrval)
+			if err != nil {
+				return nil, err
 			}
+			arow = append(arow, aintval)
 
 		}
 
-		fmt.Println("final:")
-		fmt.Println(amatrix)
-	*/
+		if len(arow) > 0 {
+			amatrix = append(amatrix, arow)
+		}
 
-	return nil
+	}
+
+	return &amatrix, nil
 }

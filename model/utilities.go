@@ -1,5 +1,5 @@
 package model
 
 type Utilities interface {
-	StrToAdjMatrix(data string) *AdjMatrix
+	StrToAdjMatrix(data string) (*AdjMatrix, error)
 }
