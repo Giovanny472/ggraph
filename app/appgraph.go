@@ -5,6 +5,7 @@ import (
 	"github.com/Giovanny472/ggraph/internal/config"
 	"github.com/Giovanny472/ggraph/internal/ggraph"
 	"github.com/Giovanny472/ggraph/internal/manager"
+	"github.com/Giovanny472/ggraph/internal/utilities"
 	"github.com/Giovanny472/ggraph/model"
 )
 
@@ -31,7 +32,7 @@ func (app *appGraph) init() {
 	app.config = config.NewConfig()
 
 	// слой логики
-	app.manag = manager.NewManager(ggraph.NewGGraph())
+	app.manag = manager.NewManager(ggraph.NewGGraph(), utilities.NewUtilities())
 
 	// слой UI
 	app.guifact = gui.NewUIFactory()

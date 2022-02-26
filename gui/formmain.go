@@ -1,9 +1,6 @@
 package gui
 
 import (
-	"fmt"
-	"strings"
-
 	"github.com/Giovanny472/ggraph/model"
 
 	"fyne.io/fyne/v2"
@@ -90,36 +87,14 @@ func (fm *formMain) onClose() {
 
 func (fm *formMain) onGraph() {
 
-	listMatrix := strings.Split(fm.txtMatrix.Text, "\n")
-	fmt.Println("listMatrix-->", listMatrix)
+	// получение матрицы
+	adjMatrix := fm.mng.Utilities().StrToAdjMatrix(fm.txtMatrix.Text)
 
-	var amatrix [][]string
-	var row []string
+	// настройка матрица
+	fm.mng.Graph().SetDirectedAdjMatrix(adjMatrix)
 
-	for idx := 0; idx < len(listMatrix); idx++ {
+	// cохранение графа
+	fm.mng.Graph().Save()
 
-		listRow := strings.Split(listMatrix[idx], " ")
-
-		row = nil
-
-		for idxrow := 0; idxrow < len(listRow); idxrow++ {
-
-			avalue := listRow[idxrow]
-			avalue = strings.Trim(avalue, " ")
-			if len(avalue) == 0 {
-				continue
-			}
-
-			row = append(row, avalue)
-
-		}
-
-		if len(row) > 0 {
-			amatrix = append(amatrix, row)
-		}
-
-	}
-
-	fmt.Println("final:")
-	fmt.Println(amatrix)
+	// отображение графа
 }

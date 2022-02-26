@@ -6,22 +6,25 @@ import (
 
 type manager struct {
 	graph model.GGraph
+	util  model.Utilities
 }
 
 var amanager *manager
 
-func NewManager(grph model.GGraph) model.Manager {
+func NewManager(grph model.GGraph, ut model.Utilities) model.Manager {
 	if amanager == nil {
-		amanager = &manager{grph}
+		amanager = &manager{grph, ut}
 	}
 	return amanager
 }
 
 func (man *manager) Init() {
-
 }
 
 func (man *manager) Graph() model.GGraph {
-	//	man.graph.SetSimpleAdjMatrix()
-	return nil
+	return man.graph
+}
+
+func (man *manager) Utilities() model.Utilities {
+	return man.util
 }
