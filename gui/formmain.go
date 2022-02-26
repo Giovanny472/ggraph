@@ -60,7 +60,7 @@ func (fm *formMain) buildform(fmMain fyne.Window) {
 	fyne.CurrentApp().Settings().SetTheme(theme.DarkTheme())
 
 	// размер
-	fmMain.Resize(fyne.NewSize(1020, 720))
+	fmMain.Resize(fyne.NewSize(720, 480))
 
 	// lytTop
 	//lytTop := container.NewGridWithColumns(1, widget.NewMultiLineEntry())
@@ -90,26 +90,36 @@ func (fm *formMain) onClose() {
 
 func (fm *formMain) onGraph() {
 
-	//val := fm.txtMatrix.Text
-	//enter := []byte("10")
-	val := strings.Split(fm.txtMatrix.Text, " ")
+	listMatrix := strings.Split(fm.txtMatrix.Text, "\n")
+	fmt.Println("listMatrix-->", listMatrix)
 
-	fmt.Println(val)
+	var amatrix [][]string
+	var row []string
 
-	for _, element := range val {
+	for idx := 0; idx < len(listMatrix); idx++ {
 
-		abyte := []byte(element)
-		if abyte == "10" {
-			fmt.Println("enter")
-			continue
+		listRow := strings.Split(listMatrix[idx], " ")
+
+		row = nil
+
+		for idxrow := 0; idxrow < len(listRow); idxrow++ {
+
+			avalue := listRow[idxrow]
+			avalue = strings.Trim(avalue, " ")
+			if len(avalue) == 0 {
+				continue
+			}
+
+			row = append(row, avalue)
+
 		}
 
-		fmt.Print(abyte, "--")
-		//fmt.Print(len(abyte), "<>")
+		if len(row) > 0 {
+			amatrix = append(amatrix, row)
+		}
+
 	}
-	fmt.Println(" ")
-	//var am model.AdjMatrix
-	//am = append(am, )
-	//fm.mng.Graph().SetSimpleAdjMatrix()
-	//fm.mng.Graph().
+
+	fmt.Println("final:")
+	fmt.Println(amatrix)
 }
