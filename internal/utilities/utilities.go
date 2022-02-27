@@ -25,7 +25,6 @@ func (ut *utilities) StrToAdjMatrix(data string) (*model.AdjMatrix, error) {
 	listMatrix := strings.Split(data, "\n")
 
 	var amatrix model.AdjMatrix
-	var arow []int
 
 	for idx := 0; idx < len(listMatrix); idx++ {
 
@@ -33,7 +32,7 @@ func (ut *utilities) StrToAdjMatrix(data string) (*model.AdjMatrix, error) {
 		listRow := strings.Split(listMatrix[idx], " ")
 
 		// инициализация
-		arow = nil
+		var arow model.AdjRow
 
 		for idxrow := 0; idxrow < len(listRow); idxrow++ {
 

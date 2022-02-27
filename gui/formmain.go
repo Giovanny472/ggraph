@@ -98,6 +98,9 @@ func (fm *formMain) onGraph() {
 	// настройка матрица
 	fm.mng.Graph().SetDirectedAdjMatrix(adjMatrix)
 
+	// создание графа
+	fm.mng.Graph().Create()
+
 	// cохранение графа
 	//fm.mng.Graph().Save()
 
