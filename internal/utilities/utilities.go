@@ -20,11 +20,11 @@ func NewUtilities() model.Utilities {
 	return util
 }
 
-func (ut *utilities) StrToAdjMatrix(data string) (*model.AdjMatrix, error) {
+func (ut *utilities) StrToGMatrix(data string) (*model.GMatrix, error) {
 
 	listMatrix := strings.Split(data, "\n")
 
-	var amatrix model.AdjMatrix
+	var amatrix model.GMatrix
 
 	for idx := 0; idx < len(listMatrix); idx++ {
 
@@ -32,7 +32,7 @@ func (ut *utilities) StrToAdjMatrix(data string) (*model.AdjMatrix, error) {
 		listRow := strings.Split(listMatrix[idx], " ")
 
 		// инициализация
-		var arow model.AdjRow
+		var arow model.GRow
 
 		for idxrow := 0; idxrow < len(listRow); idxrow++ {
 

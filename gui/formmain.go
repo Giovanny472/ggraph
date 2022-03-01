@@ -90,19 +90,19 @@ func (fm *formMain) onClose() {
 func (fm *formMain) onGraph() {
 
 	// получение матрицы
-	adjMatrix, err := fm.mng.Utilities().StrToAdjMatrix(fm.txtMatrix.Text)
+	adjMatrix, err := fm.mng.Utilities().StrToGMatrix(fm.txtMatrix.Text)
 	if err != nil {
 		log.Println("Error Ongraph: " + err.Error())
 	}
 
 	// настройка матрица
-	fm.mng.Graph().SetIncidenceAdjMatrix(adjMatrix)
+	fm.mng.Graph().SetIncidenceMatrix(adjMatrix)
 
 	// создание графа
 	fm.mng.Graph().Create()
 
 	// cохранение графа
-	//fm.mng.Graph().Save()
+	fm.mng.Graph().Save(model.GraphFileName)
 
 	// отображение графа
 }
