@@ -96,7 +96,7 @@ func (fm *formMain) onGraph() {
 	}
 
 	// настройка матрица
-	fm.mng.Graph().SetDirectedAdjMatrix(adjMatrix)
+	fm.mng.Graph().SetIncidenceAdjMatrix(adjMatrix)
 
 	// создание графа
 	fm.mng.Graph().Create()

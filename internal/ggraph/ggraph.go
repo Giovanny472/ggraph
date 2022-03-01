@@ -26,7 +26,7 @@ func (gr *ggraph) SetSimpleAdjMatrix(adm *model.AdjMatrix) {
 
 }
 
-func (gr *ggraph) SetDirectedAdjMatrix(adm *model.AdjMatrix) {
+func (gr *ggraph) SetIncidenceAdjMatrix(adm *model.AdjMatrix) {
 
 	// создание графа
 	agviz := graphviz.New()

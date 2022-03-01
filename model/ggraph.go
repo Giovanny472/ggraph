@@ -15,7 +15,7 @@ type AdjListEdge []AdjEdge
 
 type GGraph interface {
 	SetSimpleAdjMatrix(adm *AdjMatrix)
-	SetDirectedAdjMatrix(adm *AdjMatrix)
+	SetIncidenceAdjMatrix(adm *AdjMatrix)
 	Create()
 	Save()
 }
