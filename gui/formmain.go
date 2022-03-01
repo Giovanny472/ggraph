@@ -70,7 +70,7 @@ func (fm *formMain) buildform(fmMain fyne.Window) {
 	// lytCenter
 	txtGraph := widget.NewMultiLineEntry()
 
-	lytCenter := container.NewGridWithRows(2, fm.txtMatrix, txtGraph)
+	lytCenter := container.NewGridWithColumns(2, fm.txtMatrix, txtGraph)
 
 	//lytColBottom
 	btnExit := widget.NewButton("выход", fm.onClose)
