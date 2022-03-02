@@ -7,6 +7,7 @@ import (
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
@@ -19,6 +20,9 @@ type formMain struct {
 
 	// widgets
 	txtMatrix *widget.Entry
+
+	// контайнер
+	imgContainer *fyne.Container
 }
 
 var fmmain *formMain
@@ -68,9 +72,10 @@ func (fm *formMain) buildform(fmMain fyne.Window) {
 	//!!интересно --> lytTop := container.NewVBox(txtMatrix)
 
 	// lytCenter
-	txtGraph := widget.NewMultiLineEntry()
+	fm.imgContainer = container.NewCenter()
 
-	lytCenter := container.NewGridWithColumns(2, fm.txtMatrix, txtGraph)
+	//txtGraph := widget.NewMultiLineEntry()
+	lytCenter := container.NewGridWithColumns(2, fm.txtMatrix, fm.imgContainer)
 
 	//lytColBottom
 	btnExit := widget.NewButton("выход", fm.onClose)
@@ -105,4 +110,10 @@ func (fm *formMain) onGraph() {
 	fm.mng.Graph().Save(model.GraphFileName)
 
 	// отображение графа
+	img := canvas.NewImageFromFile(string(model.GraphFileName))
+	img.FillMode = canvas.ImageFillOriginal
+	fm.imgContainer.Objects = nil
+	fm.imgContainer.Add(img)
+	fm.imgContainer.Refresh()
+
 }

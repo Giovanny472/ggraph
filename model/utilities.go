@@ -3,7 +3,7 @@ package model
 const (
 	PrefixVertex  string = "V"
 	PrefixEdge    string = "e"
-	GraphFileName string = "graph.png"
+	GraphFileName string = "ggraph.png"
 )
 
 type Utilities interface {
