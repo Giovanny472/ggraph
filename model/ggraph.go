@@ -6,12 +6,13 @@ type GRow []int
 type GMatrix []GRow
 
 type GEdge struct {
-	NodeName  string
+	EdgeName  string
 	NodeStart *cgraph.Node
 	NodeEnd   *cgraph.Node
 }
 
-type ListEdge []GEdge
+type ListNodes []*cgraph.Node
+type ListEdge []*GEdge
 
 type GGraph interface {
 	SetIncidenceMatrix(mat *GMatrix)
