@@ -9,19 +9,19 @@ import (
 func CreateGraphFromIncidenceMatrix(gp *ggraph) {
 
 	// создание графа
-	gp.gvizgraph, _ = gp.gviz.Graph()
+	gp.directed.gvizgraph, _ = gp.directed.gviz.Graph()
 
 	// количество вершин
-	aCountNodes := len(*gp.incmat)
+	aCountNodes := len(*gp.directed.matIncidence)
 
 	// количество ребер
-	aCountEdge := len((*gp.incmat)[0])
+	aCountEdge := len((*gp.directed.matIncidence)[0])
 
 	// cоздание набора вершин
 	var listNodes model.ListNodes
 	for idx := 0; idx < aCountNodes; idx++ {
 
-		anode, _ := gp.gvizgraph.CreateNode(model.PrefixVertex + strconv.Itoa(idx+1))
+		anode, _ := gp.directed.gvizgraph.CreateNode(model.PrefixVertex + strconv.Itoa(idx+1))
 		listNodes = append(listNodes, anode)
 	}
 
@@ -39,7 +39,7 @@ func CreateGraphFromIncidenceMatrix(gp *ggraph) {
 		for idxRow := 0; idxRow < aCountNodes; idxRow++ {
 
 			// получаем значение
-			aval := (*gp.incmat)[idxRow][idxCol]
+			aval := (*gp.directed.matIncidence)[idxRow][idxCol]
 
 			// проверка
 			if aval == 0 {
@@ -76,7 +76,7 @@ func CreateGraphFromIncidenceMatrix(gp *ggraph) {
 	}
 
 	for _, anode := range alistEdges {
-		aed, _ := gp.gvizgraph.CreateEdge(anode.EdgeName, anode.NodeStart, anode.NodeEnd)
+		aed, _ := gp.directed.gvizgraph.CreateEdge(anode.EdgeName, anode.NodeStart, anode.NodeEnd)
 		aed.SetLabel(anode.EdgeName)
 	}
 

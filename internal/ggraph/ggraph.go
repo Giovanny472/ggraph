@@ -6,17 +6,45 @@ import (
 	"github.com/goccy/go-graphviz/cgraph"
 )
 
-type ggraph struct {
+type dataGGraph struct {
 
-	// матрица инсидентности
-	incmat *model.GMatrix
+	// матрица инцидентности
+	matIncidence *model.GMatrix
+
+	// матрица смежности
+	matAdj *model.GMatrix
 
 	// библиотека для рисования графов
 	gviz      *graphviz.Graphviz
 	gvizgraph *cgraph.Graph
 }
 
-var aggraph *ggraph
+// Ориентированный граф
+type dataDirGGraph struct {
+	*dataGGraph
+}
+
+// Неориентированный граф
+type dataNotDirGGraph struct {
+	*dataGGraph
+}
+
+type ggraph struct {
+
+	// Неориентированный граф
+	directed *dataDirGGraph
+
+	// Oриентированный граф
+	notDirected *dataNotDirGGraph
+}
+
+var (
+	aggraph *ggraph
+)
+
+//******************************************
+//  GGRAPH
+//******************************************
 
 func NewGGraph() model.GGraph {
 	if aggraph == nil {
@@ -28,23 +56,73 @@ func NewGGraph() model.GGraph {
 
 func (gr *ggraph) init() {
 
-	// библиотека для рисования графов
-	gr.gviz = graphviz.New()
+	// инициализация
+	// библиотеки для рисования графов:
+
+	// ориентированный граф
+	gr.directed = newDataDirGGraph()
+
+	// неориентированный граф
+	gr.notDirected = newDataNotDirGGraph()
+
 }
 
-func (gr *ggraph) SetIncidenceMatrix(mat *model.GMatrix) {
-
-	gr.incmat = mat
+func (gr *ggraph) Directed() model.Matrix {
+	return gr.directed
 }
 
-func (gr *ggraph) Create() {
-
-	if gr.incmat != nil {
-		CreateGraphFromIncidenceMatrix(gr)
-	}
+func (gr *ggraph) NoDirected() model.Matrix {
+	return gr.notDirected
 }
 
 func (gr *ggraph) Save(pathFile string) {
 	// создание
-	gr.gviz.RenderFilename(gr.gvizgraph, graphviz.PNG, string(pathFile))
+	gr.directed.gviz.RenderFilename(gr.directed.gvizgraph, graphviz.PNG, string(pathFile))
+}
+
+func (gr *ggraph) Create() {
+
+	if gr.directed.matIncidence != nil {
+		CreateGraphFromIncidenceMatrix(gr)
+	}
+}
+
+//******************************************
+//  DATADIRGGRAPH
+//******************************************
+func newDataDirGGraph() *dataDirGGraph {
+
+	return &dataDirGGraph{
+		&dataGGraph{gviz: graphviz.New()},
+	}
+}
+
+// назначение матрицы смежности
+func (dirg *dataDirGGraph) SetAdjacency(mat *model.GMatrix) {
+	dirg.dataGGraph.matAdj = mat
+}
+
+// назначение матрицы инцидентности
+func (dirg *dataDirGGraph) SetIncidence(mat *model.GMatrix) {
+	dirg.dataGGraph.matIncidence = mat
+}
+
+//******************************************
+//  DATANOTDIRGGRAPH
+//******************************************
+func newDataNotDirGGraph() *dataNotDirGGraph {
+
+	return &dataNotDirGGraph{
+		&dataGGraph{gviz: graphviz.New()},
+	}
+}
+
+// назначение матрицы смежности
+func (dirng *dataNotDirGGraph) SetAdjacency(mat *model.GMatrix) {
+	dirng.dataGGraph.matAdj = mat
+}
+
+// назначение матрицы инцидентности
+func (dirng *dataNotDirGGraph) SetIncidence(mat *model.GMatrix) {
+	dirng.dataGGraph.matIncidence = mat
 }
