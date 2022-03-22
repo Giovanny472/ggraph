@@ -1,6 +1,7 @@
 package gui
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/Giovanny472/ggraph/model"
@@ -65,22 +66,22 @@ func (fm *formMain) buildform(fmMain fyne.Window) {
 	// размер
 	fmMain.Resize(fyne.NewSize(720, 480))
 
-	// lytTop
-	//lytTop := container.NewGridWithColumns(1, widget.NewMultiLineEntry())
+	// для ввохода матрицы
 	fm.txtMatrix = widget.NewMultiLineEntry()
-	//fm.txtMatrix.FocusGained()
-	//!!интересно --> lytTop := container.NewVBox(txtMatrix)
+	fm.txtMatrix.SetText("")
 
 	// lytCenter
 	fm.imgContainer = container.NewCenter()
 
-	//txtGraph := widget.NewMultiLineEntry()
+	// layout
 	lytCenter := container.NewGridWithColumns(2, fm.txtMatrix, fm.imgContainer)
 
 	//lytColBottom
-	btnExit := widget.NewButton("выход", fm.onClose)
+	chkMatrices := widget.NewRadioGroup([]string{"Матрица смежности", "Матрица инцидентноcти"}, fm.onGrpBox)
 	btnGraph := widget.NewButton("граф", fm.onGraph)
-	lytbtn := container.NewGridWithColumns(2, btnExit, btnGraph)
+	btnDiGraph := widget.NewButton("Орграф", fm.onDiGraph)
+	lytbuttons := container.NewGridWithRows(2, btnGraph, btnDiGraph)
+	lytbtn := container.NewGridWithColumns(2, chkMatrices, lytbuttons)
 
 	// layout
 	baselyt := container.NewBorder(nil, lytbtn, nil, nil, lytCenter)
@@ -92,12 +93,17 @@ func (fm *formMain) onClose() {
 	fyne.CurrentApp().Quit()
 }
 
-func (fm *formMain) onGraph() {
+func (fm *formMain) onGrpBox(changed string) {
+	fmt.Println(changed)
+}
+
+func (fm *formMain) onDiGraph() {
 
 	// получение матрицы
 	adjMatrix, err := fm.mng.Utilities().StrToGMatrix(fm.txtMatrix.Text)
 	if err != nil {
-		log.Println("Error Ongraph: " + err.Error())
+		log.Println("Error onDiGraph: " + err.Error())
+		return
 	}
 
 	// настройка матрица
@@ -115,5 +121,9 @@ func (fm *formMain) onGraph() {
 	fm.imgContainer.Objects = nil
 	fm.imgContainer.Add(img)
 	fm.imgContainer.Refresh()
+
+}
+
+func (fm *formMain) onGraph() {
 
 }

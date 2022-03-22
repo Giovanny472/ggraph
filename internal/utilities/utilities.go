@@ -1,6 +1,7 @@
 package utilities
 
 import (
+	"errors"
 	"strconv"
 	"strings"
 
@@ -22,8 +23,11 @@ func NewUtilities() model.Utilities {
 
 func (ut *utilities) StrToGMatrix(data string) (*model.GMatrix, error) {
 
-	listMatrix := strings.Split(data, "\n")
+	if len(data) == 0 {
+		return nil, errors.New("нет данных")
+	}
 
+	listMatrix := strings.Split(data, "\n")
 	var amatrix model.GMatrix
 
 	for idx := 0; idx < len(listMatrix); idx++ {
