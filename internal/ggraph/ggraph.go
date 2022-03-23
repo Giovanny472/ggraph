@@ -75,16 +75,18 @@ func (gr *ggraph) NoDirected() model.Matrix {
 	return gr.notDirected
 }
 
+func (gr *ggraph) Create(tpMatrix model.TypeMatrix) {
+
+	if tpMatrix == model.TypeMatrixAdj {
+		CreateGraphFromAdjMatrix(gr)
+	} else if tpMatrix == model.TypeMatrixInc {
+		CreateGraphFromIncidenceMatrix(gr)
+	}
+}
+
 func (gr *ggraph) Save(pathFile string) {
 	// создание
 	gr.directed.gviz.RenderFilename(gr.directed.gvizgraph, graphviz.PNG, string(pathFile))
-}
-
-func (gr *ggraph) Create() {
-
-	if gr.directed.matIncidence != nil {
-		CreateGraphFromIncidenceMatrix(gr)
-	}
 }
 
 //******************************************

@@ -14,6 +14,16 @@ type GEdge struct {
 type ListNodes []*cgraph.Node
 type ListEdge []*GEdge
 
+//******************************************
+// флаг тип матрицы
+//******************************************
+type TypeMatrix int
+
+const (
+	TypeMatrixAdj TypeMatrix = 0
+	TypeMatrixInc            = 1
+)
+
 // представление графов
 type Matrix interface {
 
@@ -41,5 +51,5 @@ type GGraph interface {
 	File
 
 	// cоздание графа
-	Create()
+	Create(tpMatrix TypeMatrix)
 }

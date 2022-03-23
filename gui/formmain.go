@@ -83,6 +83,7 @@ func (fm *formMain) buildform(fmMain fyne.Window) {
 
 	// кнопки
 	btnGraph := widget.NewButton(model.GetCaptionButtons(model.IdxCaptionBtnGraph), fm.onGraph)
+	btnGraph.Disable()
 	btnDiGraph := widget.NewButton(model.GetCaptionButtons(model.IdxCaptionBtnDiGraph), fm.onDiGraph)
 
 	// layout
@@ -119,16 +120,25 @@ func (fm *formMain) onDiGraph() {
 
 	// настройка матрицы
 	if fm.strEventRadioGp == model.GetCaptionChk(model.IdxCaptionChkMatrixAdj) {
+
+		// настройка матрицы смежности
 		fm.mng.Graph().Directed().SetAdjacency(aMatrix)
+
+		// создание графа
+		fm.mng.Graph().Create(model.TypeMatrixAdj)
+
 	} else if fm.strEventRadioGp == model.GetCaptionChk(model.IdxCaptionChkMatrixInd) {
+
+		// настройка матрицы инцидентности
 		fm.mng.Graph().Directed().SetIncidence(aMatrix)
+
+		// создание графа
+		fm.mng.Graph().Create(model.TypeMatrixInc)
+
 	} else {
 		log.Println("не найдена матрица")
 		return
 	}
-
-	// создание графа
-	fm.mng.Graph().Create()
 
 	// cохранение графа
 	fm.mng.Graph().Save(model.GraphFileName)
@@ -143,7 +153,7 @@ func (fm *formMain) onDiGraph() {
 }
 
 func (fm *formMain) onGraph() {
-
+	return
 	// получение матрицы
 	aMatrix, err := fm.mng.Utilities().StrToGMatrix(fm.txtMatrix.Text)
 	if err != nil {
@@ -167,7 +177,7 @@ func (fm *formMain) onGraph() {
 	}
 
 	// создание графа
-	fm.mng.Graph().Create()
+	//fm.mng.Graph().Create()
 
 	// cохранение графа
 	fm.mng.Graph().Save(model.GraphFileName)

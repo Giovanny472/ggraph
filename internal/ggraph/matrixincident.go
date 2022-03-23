@@ -4,10 +4,9 @@ import (
 	"strconv"
 
 	"github.com/Giovanny472/ggraph/model"
-	"github.com/goccy/go-graphviz/cgraph"
 )
 
-func CreateGraphFromIncidenceMatrix(gp *ggraph) {
+func CreateGraphFromIncidenceMatrix(gp *ggraph) { //, flag model.TypeMatrix) {
 
 	// создание графа
 	gp.directed.gvizgraph, _ = gp.directed.gviz.Graph()
@@ -17,6 +16,8 @@ func CreateGraphFromIncidenceMatrix(gp *ggraph) {
 
 	// количество ребер
 	aCountEdge := len((*gp.directed.matIncidence)[0])
+
+	//if flag == model.TypeMatrixInc {}
 
 	// cоздание набора вершин
 	var listNodes model.ListNodes
@@ -48,7 +49,7 @@ func CreateGraphFromIncidenceMatrix(gp *ggraph) {
 				continue
 			}
 
-			if aval == -1 || aval == 1 {
+			if aval == -1 || aval == 1 || aval == 2 {
 
 				// название ребра
 				aEdge.EdgeName = model.PrefixEdge + strconv.Itoa(idxCol+1)
@@ -60,6 +61,12 @@ func CreateGraphFromIncidenceMatrix(gp *ggraph) {
 
 				// end
 				if aval == 1 {
+					aEdge.NodeEnd = listNodes[idxRow]
+				}
+
+				// start - end - петля
+				if aval == 2 {
+					aEdge.NodeStart = listNodes[idxRow]
 					aEdge.NodeEnd = listNodes[idxRow]
 				}
 			}
@@ -80,8 +87,8 @@ func CreateGraphFromIncidenceMatrix(gp *ggraph) {
 	for _, anode := range alistEdges {
 		aed, _ := gp.directed.gvizgraph.CreateEdge(anode.EdgeName, anode.NodeStart, anode.NodeEnd)
 		//aed.SetArrowHead(cgraph.NoneArrow)
-		aed.SetColor("orange")
-		aed.SetStyle(cgraph.BoldEdgeStyle)
+		//aed.SetColor("orange")
+		//aed.SetStyle(cgraph.BoldEdgeStyle)
 		aed.SetLabel(anode.EdgeName)
 	}
 

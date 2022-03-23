@@ -1,12 +1,14 @@
 package model
 
 const (
-	PrefixVertex  string = "V"
-	PrefixEdge    string = "e"
+	PrefixVertex  string = "Вер-"
+	PrefixEdge    string = "Реб-"
 	GraphFileName string = "ggraph.png"
 )
 
+//******************************************
 // Список названий radiogroup
+//******************************************
 type IdxCaptionRadioGp int
 
 const (
@@ -16,7 +18,9 @@ const (
 
 var listRadioGp []string = []string{"Матрица смежности", "Матрица инцидентноcти"}
 
+//******************************************
 // Список названий кнопок
+//******************************************
 type IdxCaptionBtn int
 
 const (
@@ -26,7 +30,9 @@ const (
 
 var listButtons []string = []string{"Неориентированный граф", "Ориентированный граф"}
 
+//******************************************
 // интерфейс модуля
+//******************************************
 type Utilities interface {
 	StrToGMatrix(data string) (*GMatrix, error)
 }
