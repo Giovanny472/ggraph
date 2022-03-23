@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/Giovanny472/ggraph/model"
+	"github.com/goccy/go-graphviz/cgraph"
 )
 
 func CreateGraphFromIncidenceMatrix(gp *ggraph) {
@@ -22,6 +23,7 @@ func CreateGraphFromIncidenceMatrix(gp *ggraph) {
 	for idx := 0; idx < aCountNodes; idx++ {
 
 		anode, _ := gp.directed.gvizgraph.CreateNode(model.PrefixVertex + strconv.Itoa(idx+1))
+		//anode.SetShape(cgraph.StarShape)
 		listNodes = append(listNodes, anode)
 	}
 
@@ -77,6 +79,9 @@ func CreateGraphFromIncidenceMatrix(gp *ggraph) {
 
 	for _, anode := range alistEdges {
 		aed, _ := gp.directed.gvizgraph.CreateEdge(anode.EdgeName, anode.NodeStart, anode.NodeEnd)
+		//aed.SetArrowHead(cgraph.NoneArrow)
+		aed.SetColor("orange")
+		aed.SetStyle(cgraph.BoldEdgeStyle)
 		aed.SetLabel(anode.EdgeName)
 	}
 

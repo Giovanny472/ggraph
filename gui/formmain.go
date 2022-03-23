@@ -1,7 +1,6 @@
 package gui
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/Giovanny472/ggraph/model"
@@ -24,6 +23,9 @@ type formMain struct {
 
 	// контайнер
 	imgContainer *fyne.Container
+
+	// полученное caption из event radiogroup
+	strEventRadioGp string
 }
 
 var fmmain *formMain
@@ -76,10 +78,14 @@ func (fm *formMain) buildform(fmMain fyne.Window) {
 	// layout
 	lytCenter := container.NewGridWithColumns(2, fm.txtMatrix, fm.imgContainer)
 
-	//lytColBottom
-	chkMatrices := widget.NewRadioGroup([]string{"Матрица смежности", "Матрица инцидентноcти"}, fm.onGrpBox)
-	btnGraph := widget.NewButton("граф", fm.onGraph)
-	btnDiGraph := widget.NewButton("Орграф", fm.onDiGraph)
+	//cписок radiogroup
+	chkMatrices := widget.NewRadioGroup(*model.GetListRadioGp(), fm.onGrpBox)
+
+	// кнопки
+	btnGraph := widget.NewButton(model.GetCaptionButtons(model.IdxCaptionBtnGraph), fm.onGraph)
+	btnDiGraph := widget.NewButton(model.GetCaptionButtons(model.IdxCaptionBtnDiGraph), fm.onDiGraph)
+
+	// layout
 	lytbuttons := container.NewGridWithRows(2, btnGraph, btnDiGraph)
 	lytbtn := container.NewGridWithColumns(2, chkMatrices, lytbuttons)
 
@@ -94,20 +100,32 @@ func (fm *formMain) onClose() {
 }
 
 func (fm *formMain) onGrpBox(changed string) {
-	fmt.Println(changed)
+	fm.strEventRadioGp = changed
 }
 
 func (fm *formMain) onDiGraph() {
 
 	// получение матрицы
-	adjMatrix, err := fm.mng.Utilities().StrToGMatrix(fm.txtMatrix.Text)
+	aMatrix, err := fm.mng.Utilities().StrToGMatrix(fm.txtMatrix.Text)
 	if err != nil {
 		log.Println("Error onDiGraph: " + err.Error())
 		return
 	}
+	// проверка выбранной матрицы
+	if len(fm.strEventRadioGp) == 0 {
+		log.Println("нет выбранной матрицы: " + err.Error())
+		return
+	}
 
-	// настройка матрица
-	fm.mng.Graph().Directed().SetIncidence(adjMatrix)
+	// настройка матрицы
+	if fm.strEventRadioGp == model.GetCaptionChk(model.IdxCaptionChkMatrixAdj) {
+		fm.mng.Graph().Directed().SetAdjacency(aMatrix)
+	} else if fm.strEventRadioGp == model.GetCaptionChk(model.IdxCaptionChkMatrixInd) {
+		fm.mng.Graph().Directed().SetIncidence(aMatrix)
+	} else {
+		log.Println("не найдена матрица")
+		return
+	}
 
 	// создание графа
 	fm.mng.Graph().Create()
@@ -125,5 +143,33 @@ func (fm *formMain) onDiGraph() {
 }
 
 func (fm *formMain) onGraph() {
+
+	// получение матрицы
+	aMatrix, err := fm.mng.Utilities().StrToGMatrix(fm.txtMatrix.Text)
+	if err != nil {
+		log.Println("Error onGraph: " + err.Error())
+		return
+	}
+	// проверка выбранной матрицы
+	if len(fm.strEventRadioGp) == 0 {
+		log.Println("нет выбранной матрицы: " + err.Error())
+		return
+	}
+
+	// настройка матрицы
+	if fm.strEventRadioGp == model.GetCaptionChk(model.IdxCaptionChkMatrixAdj) {
+		fm.mng.Graph().NoDirected().SetAdjacency(aMatrix)
+	} else if fm.strEventRadioGp == model.GetCaptionChk(model.IdxCaptionChkMatrixInd) {
+		fm.mng.Graph().NoDirected().SetIncidence(aMatrix)
+	} else {
+		log.Println("не найдена матрица")
+		return
+	}
+
+	// создание графа
+	fm.mng.Graph().Create()
+
+	// cохранение графа
+	fm.mng.Graph().Save(model.GraphFileName)
 
 }
