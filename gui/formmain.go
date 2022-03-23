@@ -113,7 +113,7 @@ func (fm *formMain) onDiGraph() {
 	}
 	// проверка выбранной матрицы
 	if len(fm.strEventRadioGp) == 0 {
-		log.Println("нет выбранной матрицы: " + err.Error())
+		log.Println("нет выбранной матрицы ")
 		return
 	}
 
@@ -152,7 +152,7 @@ func (fm *formMain) onGraph() {
 	}
 	// проверка выбранной матрицы
 	if len(fm.strEventRadioGp) == 0 {
-		log.Println("нет выбранной матрицы: " + err.Error())
+		log.Println("нет выбранной матрицы ")
 		return
 	}
 
