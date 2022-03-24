@@ -24,32 +24,56 @@ const (
 	TypeMatrixInc            = 1
 )
 
+//******************************************
+// определение операцией с матрицей
+//******************************************
+
 // представление графов
-type Matrix interface {
+type IMatrix interface {
 
-	// назначение матрицы смежности
-	SetAdjacency(mat *GMatrix)
+	// тип матрицы
+	SetTypeMatrix(TypeMatrix)
+	TypeMatrix() TypeMatrix
 
-	// назначение матрицы инцидентности
-	SetIncidence(mat *GMatrix)
+	// назначение матрицы
+	SetMatrix(mat *GMatrix)
+	Matrix() *GMatrix
 }
+
+//******************************************
+// файл
+//******************************************
 
 // хранение графа
 type File interface {
 	Save(pathFile string)
 }
 
-type GGraph interface {
+//******************************************
+// флаг - тип графа
+//******************************************
+type TypeGraph int
 
-	// тип графов
-	// Ориентированный граф
-	Directed() Matrix
-	// Неориентированный граф
-	NoDirected() Matrix
+const (
+	TypeDiGraph    TypeGraph = 0
+	TypeNotDiGraph           = 1
+)
+
+//******************************************
+// определение графа
+//******************************************
+
+type GGraph interface {
 
 	// работа с файлами
 	File
 
+	// тип графов
+	SetType(TypeGraph)
+
+	// Матрица
+	Matrix() IMatrix
+
 	// cоздание графа
-	Create(tpMatrix TypeMatrix)
+	Create()
 }

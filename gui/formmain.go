@@ -1,6 +1,7 @@
 package gui
 
 import (
+	"errors"
 	"log"
 
 	"github.com/Giovanny472/ggraph/model"
@@ -82,8 +83,9 @@ func (fm *formMain) buildform(fmMain fyne.Window) {
 	chkMatrices := widget.NewRadioGroup(*model.GetListRadioGp(), fm.onGrpBox)
 
 	// кнопки
-	btnGraph := widget.NewButton(model.GetCaptionButtons(model.IdxCaptionBtnGraph), fm.onGraph)
-	btnGraph.Disable()
+	btnGraph := widget.NewButton(model.GetCaptionButtons(model.IdxCaptionBtnGraph), nil) //fm.onGraph)
+	btnGraph.Enable()
+
 	btnDiGraph := widget.NewButton(model.GetCaptionButtons(model.IdxCaptionBtnDiGraph), fm.onDiGraph)
 
 	// layout
@@ -109,36 +111,30 @@ func (fm *formMain) onDiGraph() {
 	// получение матрицы
 	aMatrix, err := fm.mng.Utilities().StrToGMatrix(fm.txtMatrix.Text)
 	if err != nil {
-		log.Println("Error onDiGraph: " + err.Error())
+		log.Println("Ошибка при создании матрицы : " + err.Error())
 		return
 	}
 	// проверка выбранной матрицы
 	if len(fm.strEventRadioGp) == 0 {
-		log.Println("нет выбранной матрицы ")
+		log.Println("нет выбранного типа матрицы ")
 		return
 	}
 
-	// настройка матрицы
-	if fm.strEventRadioGp == model.GetCaptionChk(model.IdxCaptionChkMatrixAdj) {
+	// настройка тип графа
+	fm.mng.Graph().SetType(model.TypeDiGraph)
 
-		// настройка матрицы смежности
-		fm.mng.Graph().Directed().SetAdjacency(aMatrix)
-
-		// создание графа
-		fm.mng.Graph().Create(model.TypeMatrixAdj)
-
-	} else if fm.strEventRadioGp == model.GetCaptionChk(model.IdxCaptionChkMatrixInd) {
-
-		// настройка матрицы инцидентности
-		fm.mng.Graph().Directed().SetIncidence(aMatrix)
-
-		// создание графа
-		fm.mng.Graph().Create(model.TypeMatrixInc)
-
-	} else {
-		log.Println("не найдена матрица")
+	// настройка типа матрица
+	err = fm.SetMatrix()
+	if err != nil {
+		log.Println(err.Error())
 		return
 	}
+
+	// назначение матрицы
+	fm.mng.Graph().Matrix().SetMatrix(aMatrix)
+
+	// создание графа
+	fm.mng.Graph().Create()
 
 	// cохранение графа
 	fm.mng.Graph().Save(model.GraphFileName)
@@ -152,12 +148,13 @@ func (fm *formMain) onDiGraph() {
 
 }
 
+/*
 func (fm *formMain) onGraph() {
-	return
+
 	// получение матрицы
 	aMatrix, err := fm.mng.Utilities().StrToGMatrix(fm.txtMatrix.Text)
 	if err != nil {
-		log.Println("Error onGraph: " + err.Error())
+		log.Println("Error onDiGraph: " + err.Error())
 		return
 	}
 	// проверка выбранной матрицы
@@ -168,18 +165,51 @@ func (fm *formMain) onGraph() {
 
 	// настройка матрицы
 	if fm.strEventRadioGp == model.GetCaptionChk(model.IdxCaptionChkMatrixAdj) {
+
+		// настройка матрицы смежности
 		fm.mng.Graph().NoDirected().SetAdjacency(aMatrix)
+
+		// создание графа
+		fm.mng.Graph().Create(model.TypeMatrixAdj, model.TypeNotDiGraph)
+
 	} else if fm.strEventRadioGp == model.GetCaptionChk(model.IdxCaptionChkMatrixInd) {
+
+		// настройка матрицы инцидентности
 		fm.mng.Graph().NoDirected().SetIncidence(aMatrix)
+
+		// создание графа
+		fm.mng.Graph().Create(model.TypeMatrixInc, model.TypeNotDiGraph)
+
 	} else {
 		log.Println("не найдена матрица")
 		return
 	}
 
-	// создание графа
-	//fm.mng.Graph().Create()
-
 	// cохранение графа
+	fmt.Println("saveeeee prepareeeee")
 	fm.mng.Graph().Save(model.GraphFileName)
+	fmt.Println("saveeeee OK")
 
+	// отображение графа
+	img := canvas.NewImageFromFile(string(model.GraphFileName))
+	img.FillMode = canvas.ImageFillOriginal
+	fm.imgContainer.Objects = nil
+	fm.imgContainer.Add(img)
+	fm.imgContainer.Refresh()
+}
+*/
+
+func (fm *formMain) SetMatrix() (err error) {
+
+	err = nil
+
+	if fm.strEventRadioGp == model.GetCaptionChk(model.IdxCaptionChkMatrixAdj) {
+		fm.mng.Graph().Matrix().SetTypeMatrix(model.TypeMatrixAdj)
+	} else if fm.strEventRadioGp == model.GetCaptionChk(model.IdxCaptionChkMatrixInd) {
+		fm.mng.Graph().Matrix().SetTypeMatrix(model.TypeMatrixInc)
+	} else {
+		err = errors.New("тип матрицы не выбран")
+	}
+
+	return err
 }

@@ -6,19 +6,27 @@ import (
 	"github.com/goccy/go-graphviz/cgraph"
 )
 
-type dataGGraph struct {
-
-	// матрица инцидентности
-	matIncidence *model.GMatrix
-
-	// матрица смежности
-	matAdj *model.GMatrix
+type ggraph struct {
 
 	// библиотека для рисования графов
 	gviz      *graphviz.Graphviz
 	gvizgraph *cgraph.Graph
+
+	// тип графа
+	tpgp model.TypeGraph
+
+	// для назначени матрицы
+	matrix model.IMatrix
+
+	// матрица инцидентности
+	//matIncidence *model.GMatrix
+
+	// матрица смежности
+	//matAdj *model.GMatrix
+
 }
 
+/*
 // Ориентированный граф
 type dataDirGGraph struct {
 	*dataGGraph
@@ -37,7 +45,7 @@ type ggraph struct {
 	// Oриентированный граф
 	notDirected *dataNotDirGGraph
 }
-
+*/
 var (
 	aggraph *ggraph
 )
@@ -45,7 +53,6 @@ var (
 //******************************************
 //  GGRAPH
 //******************************************
-
 func NewGGraph() model.GGraph {
 	if aggraph == nil {
 		aggraph = new(ggraph)
@@ -54,19 +61,59 @@ func NewGGraph() model.GGraph {
 	return aggraph
 }
 
-func (gr *ggraph) init() {
+func (gp *ggraph) init() {
 
-	// инициализация
-	// библиотеки для рисования графов:
+	// матрица (смежности или инцидентности)
+	gp.matrix = NewMatrix()
 
-	// ориентированный граф
-	gr.directed = newDataDirGGraph()
+	// cоздание экземпляра для рисования графов
+	gp.gviz = graphviz.New()
+}
 
-	// неориентированный граф
-	gr.notDirected = newDataNotDirGGraph()
+// тип графов
+func (gp *ggraph) SetType(tpg model.TypeGraph) {
+	gp.tpgp = tpg
+}
+
+func (gp *ggraph) Create() {
+
+	if gp.matrix.TypeMatrix() == model.TypeMatrixAdj {
+
+		CreateGraphFromAdjMatrix(gp, gp.tpgp)
+
+	} //else if gp.matrix.TypeMatrix() == model.TypeMatrixInc {
+	//		CreateGraphFromIncidenceMatrix(gr)
+	//}
 
 }
 
+//******************************************
+//  MATRIX
+//******************************************
+func (gp *ggraph) Matrix() model.IMatrix {
+	return gp.matrix
+}
+
+// тип матрицы
+//func (gp *ggraph) SetTypeMatrix(tpm model.TypeMatrix) {
+//	gp.matrix.SetTypeMatrix(tpm)
+//}
+
+// назначение матрицы
+//func (gp *ggraph) SetMatrix(mat *model.GMatrix) {
+//	gp.matrix.SetMatrix(mat)
+//}
+
+//******************************************
+//  FILES
+//******************************************
+func (gp *ggraph) Save(pathFile string) {
+	// создание
+	gp.gviz.RenderFilename(gp.gvizgraph, graphviz.PNG, string(pathFile))
+	//gr.directed.gviz.RenderFilename(gr.directed.gvizgraph, graphviz.PNG, string(pathFile))
+}
+
+/*
 func (gr *ggraph) Directed() model.Matrix {
 	return gr.directed
 }
@@ -75,20 +122,22 @@ func (gr *ggraph) NoDirected() model.Matrix {
 	return gr.notDirected
 }
 
-func (gr *ggraph) Create(tpMatrix model.TypeMatrix) {
+func (gr *ggraph) Create(tpMatrix model.TypeMatrix, tpGraph model.TypeGraph) {
 
 	if tpMatrix == model.TypeMatrixAdj {
-		CreateGraphFromAdjMatrix(gr)
+		CreateGraphFromAdjMatrix(gr, tpGraph)
 	} else if tpMatrix == model.TypeMatrixInc {
 		CreateGraphFromIncidenceMatrix(gr)
 	}
 }
+*/
 
-func (gr *ggraph) Save(pathFile string) {
-	// создание
-	gr.directed.gviz.RenderFilename(gr.directed.gvizgraph, graphviz.PNG, string(pathFile))
-}
+//func (gr *ggraph) Save(pathFile string) {
+//	// создание
+//	gr.directed.gviz.RenderFilename(gr.directed.gvizgraph, graphviz.PNG, string(pathFile))
+//}
 
+/*
 //******************************************
 //  DATADIRGGRAPH
 //******************************************
@@ -128,3 +177,4 @@ func (dirng *dataNotDirGGraph) SetAdjacency(mat *model.GMatrix) {
 func (dirng *dataNotDirGGraph) SetIncidence(mat *model.GMatrix) {
 	dirng.dataGGraph.matIncidence = mat
 }
+*/

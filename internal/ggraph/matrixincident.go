@@ -1,11 +1,6 @@
 package ggraph
 
-import (
-	"strconv"
-
-	"github.com/Giovanny472/ggraph/model"
-)
-
+/*
 func CreateGraphFromIncidenceMatrix(gp *ggraph) { //, flag model.TypeMatrix) {
 
 	// создание графа
@@ -93,3 +88,4 @@ func CreateGraphFromIncidenceMatrix(gp *ggraph) { //, flag model.TypeMatrix) {
 	}
 
 }
+*/
