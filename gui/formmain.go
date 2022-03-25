@@ -1,8 +1,7 @@
 package gui
 
 import (
-	"errors"
-	"log"
+	"fmt"
 
 	"github.com/Giovanny472/ggraph/model"
 
@@ -25,8 +24,8 @@ type formMain struct {
 	// контайнер
 	imgContainer *fyne.Container
 
-	// полученное caption из event radiogroup
-	strEventRadioGp string
+	// назначение выбраного radiogroup(матрицу)
+	typeMatrixRadioGp model.TypeMatrix
 }
 
 var fmmain *formMain
@@ -83,9 +82,7 @@ func (fm *formMain) buildform(fmMain fyne.Window) {
 	chkMatrices := widget.NewRadioGroup(*model.GetListRadioGp(), fm.onGrpBox)
 
 	// кнопки
-	btnGraph := widget.NewButton(model.GetCaptionButtons(model.IdxCaptionBtnGraph), nil) //fm.onGraph)
-	btnGraph.Enable()
-
+	btnGraph := widget.NewButton(model.GetCaptionButtons(model.IdxCaptionBtnGraph), fm.onNotDiGraph)
 	btnDiGraph := widget.NewButton(model.GetCaptionButtons(model.IdxCaptionBtnDiGraph), fm.onDiGraph)
 
 	// layout
@@ -103,113 +100,42 @@ func (fm *formMain) onClose() {
 }
 
 func (fm *formMain) onGrpBox(changed string) {
-	fm.strEventRadioGp = changed
+
+	if changed == model.GetCaptionChk(model.IdxCaptionChkMatrixAdj) {
+		fm.typeMatrixRadioGp = model.TypeMatrixAdj
+	} else if changed == model.GetCaptionChk(model.IdxCaptionChkMatrixInd) {
+		fm.typeMatrixRadioGp = model.TypeMatrixInc
+	} else {
+		fm.typeMatrixRadioGp = -1
+	}
 }
 
 func (fm *formMain) onDiGraph() {
 
-	// получение матрицы
-	aMatrix, err := fm.mng.Utilities().StrToGMatrix(fm.txtMatrix.Text)
+	err := fm.mng.GenerateGraph(fm.txtMatrix.Text, model.TypeDiGraph, fm.typeMatrixRadioGp)
 	if err != nil {
-		log.Println("Ошибка при создании матрицы : " + err.Error())
+		fmt.Println(err)
 		return
 	}
-	// проверка выбранной матрицы
-	if len(fm.strEventRadioGp) == 0 {
-		log.Println("нет выбранного типа матрицы ")
-		return
-	}
+	fm.showGraph(string(model.GraphFileName))
+}
 
-	// настройка тип графа
-	fm.mng.Graph().SetType(model.TypeDiGraph)
+func (fm *formMain) onNotDiGraph() {
 
-	// настройка типа матрица
-	err = fm.SetMatrix()
+	err := fm.mng.GenerateGraph(fm.txtMatrix.Text, model.TypeNotDiGraph, fm.typeMatrixRadioGp)
 	if err != nil {
-		log.Println(err.Error())
+		fmt.Println(err)
 		return
 	}
+	fm.showGraph(string(model.GraphFileName))
+}
 
-	// назначение матрицы
-	fm.mng.Graph().Matrix().SetMatrix(aMatrix)
-
-	// создание графа
-	fm.mng.Graph().Create()
-
-	// cохранение графа
-	fm.mng.Graph().Save(model.GraphFileName)
+func (fm *formMain) showGraph(fileNameGraph string) {
 
 	// отображение графа
-	img := canvas.NewImageFromFile(string(model.GraphFileName))
+	img := canvas.NewImageFromFile(fileNameGraph)
 	img.FillMode = canvas.ImageFillOriginal
 	fm.imgContainer.Objects = nil
 	fm.imgContainer.Add(img)
 	fm.imgContainer.Refresh()
-
-}
-
-/*
-func (fm *formMain) onGraph() {
-
-	// получение матрицы
-	aMatrix, err := fm.mng.Utilities().StrToGMatrix(fm.txtMatrix.Text)
-	if err != nil {
-		log.Println("Error onDiGraph: " + err.Error())
-		return
-	}
-	// проверка выбранной матрицы
-	if len(fm.strEventRadioGp) == 0 {
-		log.Println("нет выбранной матрицы ")
-		return
-	}
-
-	// настройка матрицы
-	if fm.strEventRadioGp == model.GetCaptionChk(model.IdxCaptionChkMatrixAdj) {
-
-		// настройка матрицы смежности
-		fm.mng.Graph().NoDirected().SetAdjacency(aMatrix)
-
-		// создание графа
-		fm.mng.Graph().Create(model.TypeMatrixAdj, model.TypeNotDiGraph)
-
-	} else if fm.strEventRadioGp == model.GetCaptionChk(model.IdxCaptionChkMatrixInd) {
-
-		// настройка матрицы инцидентности
-		fm.mng.Graph().NoDirected().SetIncidence(aMatrix)
-
-		// создание графа
-		fm.mng.Graph().Create(model.TypeMatrixInc, model.TypeNotDiGraph)
-
-	} else {
-		log.Println("не найдена матрица")
-		return
-	}
-
-	// cохранение графа
-	fmt.Println("saveeeee prepareeeee")
-	fm.mng.Graph().Save(model.GraphFileName)
-	fmt.Println("saveeeee OK")
-
-	// отображение графа
-	img := canvas.NewImageFromFile(string(model.GraphFileName))
-	img.FillMode = canvas.ImageFillOriginal
-	fm.imgContainer.Objects = nil
-	fm.imgContainer.Add(img)
-	fm.imgContainer.Refresh()
-}
-*/
-
-func (fm *formMain) SetMatrix() (err error) {
-
-	err = nil
-
-	if fm.strEventRadioGp == model.GetCaptionChk(model.IdxCaptionChkMatrixAdj) {
-		fm.mng.Graph().Matrix().SetTypeMatrix(model.TypeMatrixAdj)
-	} else if fm.strEventRadioGp == model.GetCaptionChk(model.IdxCaptionChkMatrixInd) {
-		fm.mng.Graph().Matrix().SetTypeMatrix(model.TypeMatrixInc)
-	} else {
-		err = errors.New("тип матрицы не выбран")
-	}
-
-	return err
 }

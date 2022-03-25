@@ -1,7 +1,7 @@
 package model
 
 type Manager interface {
-	Init()
-	Graph() GGraph
-	Utilities() Utilities
+
+	// генерируем граф
+	GenerateGraph(txtMatrix string, tpgp TypeGraph, tpm TypeMatrix) error
 }
