@@ -70,6 +70,7 @@ func (fm *formMain) buildform(fmMain fyne.Window) {
 
 	// для ввохода матрицы
 	fm.txtMatrix = widget.NewMultiLineEntry()
+	fm.txtMatrix.SetPlaceHolder("Вводите матрицу здесь")
 	fm.txtMatrix.SetText("")
 
 	// lytCenter
@@ -80,14 +81,15 @@ func (fm *formMain) buildform(fmMain fyne.Window) {
 
 	//cписок radiogroup
 	chkMatrices := widget.NewRadioGroup(*model.GetListRadioGp(), fm.onGrpBox)
+	chkTypeGraphs := widget.NewRadioGroup(*model.GetListTypeGraph(), fm.onListTypeGraphs)
+	//chkDiGraph := widget.NewRadioGroup(*model.GetCaptionButtons(model.IdxCaptionBtnDiGraph), fm.onDiGraph)
 
 	// кнопки
-	btnGraph := widget.NewButton(model.GetCaptionButtons(model.IdxCaptionBtnGraph), fm.onNotDiGraph)
-	btnDiGraph := widget.NewButton(model.GetCaptionButtons(model.IdxCaptionBtnDiGraph), fm.onDiGraph)
+	btnCreateGraph := widget.NewButton(model.IdxCaptionBtnCreateGraph, fm.onCreateGraph)
 
 	// layout
-	lytbuttons := container.NewGridWithRows(2, btnGraph, btnDiGraph)
-	lytbtn := container.NewGridWithColumns(2, chkMatrices, lytbuttons)
+	//lytbuttons := container.NewGridWithRows(2, chkTypeGraphs, btnCreateGraph)
+	lytbtn := container.NewGridWithColumns(3, chkMatrices, chkTypeGraphs, btnCreateGraph)
 
 	// layout
 	baselyt := container.NewBorder(nil, lytbtn, nil, nil, lytCenter)
@@ -110,7 +112,11 @@ func (fm *formMain) onGrpBox(changed string) {
 	}
 }
 
-func (fm *formMain) onDiGraph() {
+func (fm *formMain) onListTypeGraphs(changed string) {
+
+}
+
+func (fm *formMain) onDiGraph(changed string) {
 
 	err := fm.mng.GenerateGraph(fm.txtMatrix.Text, model.TypeDiGraph, fm.typeMatrixRadioGp)
 	if err != nil {
@@ -120,7 +126,7 @@ func (fm *formMain) onDiGraph() {
 	fm.showGraph(string(model.GraphFileName))
 }
 
-func (fm *formMain) onNotDiGraph() {
+func (fm *formMain) onNotDiGraph(changed string) {
 
 	err := fm.mng.GenerateGraph(fm.txtMatrix.Text, model.TypeNotDiGraph, fm.typeMatrixRadioGp)
 	if err != nil {
@@ -128,6 +134,10 @@ func (fm *formMain) onNotDiGraph() {
 		return
 	}
 	fm.showGraph(string(model.GraphFileName))
+}
+
+func (fm *formMain) onCreateGraph() {
+
 }
 
 func (fm *formMain) showGraph(fileNameGraph string) {

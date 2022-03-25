@@ -7,28 +7,33 @@ const (
 )
 
 //******************************************
-// Список названий radiogroup
+// Список названий radiogroup - матрица
 //******************************************
-type IdxCaptionRadioGp int
+type IdxCaptionRadioGpMatrix int
 
 const (
-	IdxCaptionChkMatrixAdj IdxCaptionRadioGp = 0
-	IdxCaptionChkMatrixInd                   = 1
+	IdxCaptionChkMatrixAdj IdxCaptionRadioGpMatrix = 0
+	IdxCaptionChkMatrixInd                         = 1
 )
 
 var listRadioGp []string = []string{"Матрица смежности", "Матрица инцидентноcти"}
 
 //******************************************
-// Список названий кнопок
+// Список названий radiogroup - тип графа
 //******************************************
-type IdxCaptionBtn int
+type IdxCaptionRadioGpTypeGraph int
 
 const (
-	IdxCaptionBtnGraph   IdxCaptionBtn = 0
-	IdxCaptionBtnDiGraph               = 1
+	IdxCaptionChkGraph   IdxCaptionRadioGpTypeGraph = 0
+	IdxCaptionChkDiGraph                            = 1
 )
 
-var listButtons []string = []string{"Неориентированный граф", "Ориентированный граф"}
+var listChecksTypeGraph []string = []string{"Неориентированный граф", "Ориентированный граф"}
+
+//******************************************
+// Список названий radiogroup - тип графа
+//******************************************
+const IdxCaptionBtnCreateGraph string = "Граф"
 
 //******************************************
 // интерфейс модуля
@@ -37,8 +42,8 @@ type Utilities interface {
 	StrToGMatrix(data string) (*GMatrix, error)
 }
 
-// получение caption для radiogroup
-func GetCaptionChk(value IdxCaptionRadioGp) string {
+// получение caption для radiogroup матриц
+func GetCaptionChk(value IdxCaptionRadioGpMatrix) string {
 	return listRadioGp[int(value)]
 }
 
@@ -46,7 +51,7 @@ func GetListRadioGp() *[]string {
 	return &listRadioGp
 }
 
-// получение caption для кнопок
-func GetCaptionButtons(value IdxCaptionBtn) string {
-	return listButtons[int(value)]
+// получение caption для типа граф
+func GetListTypeGraph() *[]string {
+	return &listChecksTypeGraph
 }
