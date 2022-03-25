@@ -51,14 +51,10 @@ func (gp *ggraph) SetType(tpg model.TypeGraph) {
 func (gp *ggraph) Create() {
 
 	if gp.matrix.TypeMatrix() == model.TypeMatrixAdj {
-
 		CreateGraphFromAdjMatrix(gp, gp.tpgp)
-
 	} else if gp.matrix.TypeMatrix() == model.TypeMatrixInc {
-
-		//CreateGraphFromIncidenceMatrix(gr)
+		CreateGraphFromIncMatrix(gp, gp.tpgp)
 	}
-
 }
 
 //******************************************
@@ -74,5 +70,4 @@ func (gp *ggraph) Matrix() model.IMatrix {
 func (gp *ggraph) Save(pathFile string) {
 	// создание
 	gp.gviz.RenderFilename(gp.gvizgraph, graphviz.PNG, string(pathFile))
-	//gr.directed.gviz.RenderFilename(gr.directed.gvizgraph, graphviz.PNG, string(pathFile))
 }
