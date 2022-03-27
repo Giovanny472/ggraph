@@ -26,6 +26,9 @@ type formMain struct {
 
 	// назначение выбраного radiogroup(матрицу)
 	typeMatrixRadioGp model.TypeMatrix
+
+	// назначение выбраного radiogroup(тип графа)
+	typeGraphRadioGp model.TypeGraph
 }
 
 var fmmain *formMain
@@ -79,16 +82,15 @@ func (fm *formMain) buildform(fmMain fyne.Window) {
 	// layout
 	lytCenter := container.NewGridWithColumns(2, fm.txtMatrix, fm.imgContainer)
 
-	//cписок radiogroup
-	chkMatrices := widget.NewRadioGroup(*model.GetListRadioGp(), fm.onGrpBox)
+	//cписок radiogroup - тип матрицы
+	chkMatrices := widget.NewRadioGroup(*model.GetListRadioGp(), fm.onListTypeMatrix)
+	//cписок radiogroup - тип графа
 	chkTypeGraphs := widget.NewRadioGroup(*model.GetListTypeGraph(), fm.onListTypeGraphs)
-	//chkDiGraph := widget.NewRadioGroup(*model.GetCaptionButtons(model.IdxCaptionBtnDiGraph), fm.onDiGraph)
 
 	// кнопки
 	btnCreateGraph := widget.NewButton(model.IdxCaptionBtnCreateGraph, fm.onCreateGraph)
 
 	// layout
-	//lytbuttons := container.NewGridWithRows(2, chkTypeGraphs, btnCreateGraph)
 	lytbtn := container.NewGridWithColumns(3, chkMatrices, chkTypeGraphs, btnCreateGraph)
 
 	// layout
@@ -97,15 +99,11 @@ func (fm *formMain) buildform(fmMain fyne.Window) {
 	fmMain.SetContent(baselyt)
 }
 
-func (fm *formMain) onClose() {
-	fyne.CurrentApp().Quit()
-}
+func (fm *formMain) onListTypeMatrix(changed string) {
 
-func (fm *formMain) onGrpBox(changed string) {
-
-	if changed == model.GetCaptionChk(model.IdxCaptionChkMatrixAdj) {
+	if changed == model.GetCaptionGpTypeMatrix(model.IdxCaptionChkMatrixAdj) {
 		fm.typeMatrixRadioGp = model.TypeMatrixAdj
-	} else if changed == model.GetCaptionChk(model.IdxCaptionChkMatrixInd) {
+	} else if changed == model.GetCaptionGpTypeMatrix(model.IdxCaptionChkMatrixInd) {
 		fm.typeMatrixRadioGp = model.TypeMatrixInc
 	} else {
 		fm.typeMatrixRadioGp = -1
@@ -114,30 +112,23 @@ func (fm *formMain) onGrpBox(changed string) {
 
 func (fm *formMain) onListTypeGraphs(changed string) {
 
-}
-
-func (fm *formMain) onDiGraph(changed string) {
-
-	err := fm.mng.GenerateGraph(fm.txtMatrix.Text, model.TypeDiGraph, fm.typeMatrixRadioGp)
-	if err != nil {
-		fmt.Println(err)
-		return
+	if changed == model.GetCaptionGpTypeGraph(model.IdxCaptionChkDiGraph) {
+		fm.typeGraphRadioGp = model.TypeDiGraph
+	} else if changed == model.GetCaptionGpTypeGraph(model.IdxCaptionChkNotDiGraph) {
+		fm.typeGraphRadioGp = model.TypeNotDiGraph
+	} else {
+		fm.typeGraphRadioGp = -1
 	}
-	fm.showGraph(string(model.GraphFileName))
-}
-
-func (fm *formMain) onNotDiGraph(changed string) {
-
-	err := fm.mng.GenerateGraph(fm.txtMatrix.Text, model.TypeNotDiGraph, fm.typeMatrixRadioGp)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fm.showGraph(string(model.GraphFileName))
 }
 
 func (fm *formMain) onCreateGraph() {
 
+	err := fm.mng.GenerateGraph(fm.txtMatrix.Text, fm.typeGraphRadioGp, fm.typeMatrixRadioGp)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fm.showGraph(string(model.GraphFileName))
 }
 
 func (fm *formMain) showGraph(fileNameGraph string) {

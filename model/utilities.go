@@ -24,8 +24,8 @@ var listRadioGp []string = []string{"Матрица смежности", "Мат
 type IdxCaptionRadioGpTypeGraph int
 
 const (
-	IdxCaptionChkGraph   IdxCaptionRadioGpTypeGraph = 0
-	IdxCaptionChkDiGraph                            = 1
+	IdxCaptionChkNotDiGraph IdxCaptionRadioGpTypeGraph = 0
+	IdxCaptionChkDiGraph                               = 1
 )
 
 var listChecksTypeGraph []string = []string{"Неориентированный граф", "Ориентированный граф"}
@@ -42,13 +42,26 @@ type Utilities interface {
 	StrToGMatrix(data string) (*GMatrix, error)
 }
 
+//****************************
+// тип матрицы
+//****************************
+
 // получение caption для radiogroup матриц
-func GetCaptionChk(value IdxCaptionRadioGpMatrix) string {
+func GetCaptionGpTypeMatrix(value IdxCaptionRadioGpMatrix) string {
 	return listRadioGp[int(value)]
 }
 
 func GetListRadioGp() *[]string {
 	return &listRadioGp
+}
+
+//****************************
+// тип тип графа
+//****************************
+
+// получение caption для radiogroup матриц
+func GetCaptionGpTypeGraph(value IdxCaptionRadioGpTypeGraph) string {
+	return listChecksTypeGraph[int(value)]
 }
 
 // получение caption для типа граф
